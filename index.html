@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>JSL SmartGrade Engine — Round 2 Prototype</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<style>
+:root{--bg:#f4f6f9;--panel:#fff;--text:#141a24;--muted:#5b6472;--border:#dfe4ea;--accent:#e2661a;--green:#1f6f4a;--navy:#0f2942;--danger:#b5471b;--warn:#8a6300;--soft:#eef3f7;--blue:#2b6cb0}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0f18;--panel:#131b28;--text:#e9edf3;--muted:#96a1b0;--border:#243347;--navy:#0a2036;--soft:#172333;--blue:#72a9e5}}
+:root[data-theme="dark"]{--bg:#0a0f18;--panel:#131b28;--text:#e9edf3;--muted:#96a1b0;--border:#243347;--navy:#0a2036;--soft:#172333;--blue:#72a9e5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}.wrap{max-width:1120px;margin:auto;padding:22px 16px 60px}h1{font-size:1.65rem;margin:0 0 3px}.sub{color:var(--muted);font-size:.92rem;margin:0 0 16px}.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:15px;box-shadow:0 2px 8px rgba(15,41,66,.03)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}label{display:block;font-size:.78rem;font-weight:700;margin-bottom:6px;color:var(--muted)}select,input[type=number],input[type=range]{width:100%;padding:9px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.9rem}input[type=range]{padding:0}.btn{background:var(--accent);color:#fff;border:0;padding:11px 18px;border-radius:9px;font-weight:800;cursor:pointer;font-size:.92rem;margin-top:14px}.btn.secondary{background:var(--navy)}.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--border)}.btn.green{background:var(--green)}.btn:hover{filter:brightness(.96)}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.small{font-size:.78rem}.muted{color:var(--muted)}.section-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}.section-title h3{margin:0;font-size:1.08rem}.badge{font-size:.7rem;font-weight:800;border-radius:999px;padding:4px 9px;background:var(--soft);color:var(--muted)}.badge.green{background:#e3f3ea;color:var(--green)}.badge.orange{background:#fff1e7;color:#9a4c12}.badge.red{background:#fdeee6;color:var(--danger)}.notice{background:#fff4e8;color:#7a4a12;border:1px solid #e8c79a;padding:9px 12px;border-radius:9px;font-size:.82rem;margin-top:10px}.info{background:var(--soft);padding:11px 12px;border-radius:9px;font-size:.82rem;color:var(--muted);line-height:1.5}.hero{background:linear-gradient(135deg,var(--navy),#183b5d);color:#fff;border-radius:15px;padding:20px;margin-bottom:15px}.hero .sub{color:#d7e1ec}.hero-grid{display:grid;grid-template-columns:1.5fr .8fr;gap:18px;align-items:end}@media(max-width:700px){.hero-grid{grid-template-columns:1fr}}.progress{height:8px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden}.progress>span{display:block;height:100%;background:#e2661a}.rankcard{border:0;border-bottom:1px solid var(--border);border-radius:0;padding:10px 4px;margin:0;background:transparent}.rankcard:last-child{border-bottom:0}.rankline{font-size:.94rem;line-height:1.55;color:var(--text)}.rankline .gname{font-weight:900}.rankline .score{font-weight:900;color:var(--green);font-size:1rem}.rankwhy{font-size:.83rem;color:var(--muted);line-height:1.45;margin-top:2px}.rankwhy b{color:var(--text)}.rank-status{font-size:.78rem;font-weight:800;margin-left:4px}.rank-status.top{color:var(--green)}.rank-status.over{color:var(--danger)}.rank-status.under{color:var(--warn)}.rank-status.alt{color:var(--muted)}.reject{font-size:.82rem;color:var(--muted);padding:7px 0;border-bottom:1px dashed var(--border);line-height:1.45}.tradeoff{background:var(--navy);color:#f2f5f9;border-radius:11px;padding:16px;font-size:.91rem;line-height:1.55}.tradeoff b{color:#fff}.footnote{font-size:.74rem;color:var(--muted);line-height:1.55}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;font-size:.8rem}.table th,.table td{padding:9px 8px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap}.table th{color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.03em}.table .best{font-weight:900;color:var(--green)}.meter{height:8px;border-radius:99px;background:var(--border);overflow:hidden}.meter span{display:block;height:100%;background:var(--green)}.tabs{display:flex;gap:8px;border-bottom:1px solid var(--border);margin-bottom:14px;overflow:auto}.tab{border:0;background:transparent;padding:9px 12px;color:var(--muted);font-weight:800;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}.tab.active{color:var(--text);border-bottom-color:var(--accent)}details{border:1px solid var(--border);border-radius:10px;padding:10px 12px;background:var(--bg)}summary{cursor:pointer;font-weight:800;font-size:.85rem}.pair-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:9px}.pair{border:1px solid var(--border);border-radius:9px;padding:10px;background:var(--panel)}.pair select{margin-top:6px}.weights{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.weight-card{border:1px solid var(--border);border-radius:9px;padding:10px;background:var(--bg)}.weight-card strong{display:block;margin-bottom:5px}.pillbar{display:flex;height:10px;border-radius:99px;overflow:hidden;background:var(--border)}.pillbar span{display:block}.svgbox{display:flex;justify-content:center}.whatif{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}@media(max-width:700px){.whatif{grid-template-columns:1fr}}.scenario{border:1px solid var(--border);border-radius:10px;padding:12px;background:var(--bg)}.scenario strong{display:block;margin-bottom:4px}.review{border:1px solid #e8c79a;background:#fff8eb;color:#76500e;border-radius:10px;padding:12px;font-size:.82rem;line-height:1.5}.success{border:1px solid #a9d5bd;background:#eff9f3;color:#205b40;border-radius:10px;padding:12px;font-size:.82rem;line-height:1.5}.source-card{border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;background:var(--bg)}.source-card h4{margin:0 0 5px}.kbd{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--soft);padding:2px 5px;border-radius:4px}.hide{display:none}@media print{body{background:#fff}.wrap{max-width:none}.hero{color:#000;background:#fff;border:1px solid #ccc}.card{box-shadow:none;break-inside:avoid}.btn,.tabs,details:not([open]),.no-print{display:none!important}.tradeoff{color:#000;background:#eee}}
+</style>
+</head>
+<body><div id="root"></div>
+<script>
+const h=React.createElement;const{useState,useMemo}=React;
+
+// Prototype/reference grade dataset. Values are retained from the supplied artifact.
+// They are NOT JSL-proprietary values. Validate against JSL specifications before deployment.
+const GRADES={
+ '304':{name:'304 (S30400)',type:'Austenitic',pren:18.5,yield:205,tensile:515,elong:40,minT:-196,maxT:870,weld:90,cost:1.00,form:90,deep:88,bend:90,source:'Atlas Steels / worldstainless reference set'},
+ '316L':{name:'316L (S31603)',type:'Austenitic',pren:25.0,yield:170,tensile:485,elong:40,minT:-196,maxT:870,weld:88,cost:1.30,form:90,deep:86,bend:90,source:'Atlas Steels / worldstainless reference set'},
+ '321':{name:'321 (S32100)',type:'Stabilized Austenitic',pren:18.0,yield:205,tensile:515,elong:40,minT:-196,maxT:900,weld:85,cost:1.25,form:88,deep:84,bend:86,source:'Atlas Steels / worldstainless reference set'},
+ '430':{name:'430 (S43000)',type:'Ferritic',pren:16.0,yield:205,tensile:450,elong:22,minT:-20,maxT:815,weld:70,cost:.85,form:72,deep:65,bend:70,source:'Atlas Steels / worldstainless reference set'},
+ '2205':{name:'2205 Duplex (S32205)',type:'Duplex',pren:35.5,yield:450,tensile:620,elong:25,minT:-50,maxT:315,weld:65,cost:1.70,form:62,deep:55,bend:60,source:'ProjectMaterials / Langley Alloys reference set'},
+ '2507':{name:'2507 Super Duplex (S32750)',type:'Super Duplex',pren:42.5,yield:550,tensile:795,elong:15,minT:-50,maxT:300,weld:55,cost:2.30,form:48,deep:42,bend:48,source:'ProjectMaterials / Langley Alloys reference set'}
+};
+const CHLORIDE={low:16,moderate:19,'mod-high':24,high:30,severe:40};
+const ACID={none:0,mild:3,moderate:6,strong:10};
+const TEMPBAND={cryogenic:{min:-196,max:-29,label:'Cryogenic (-196°C to -29°C)'},ambient:{min:-20,max:120,label:'Ambient (-20°C to 120°C)'},elevated:{min:120,max:350,label:'Elevated (120°C to 350°C)'},high:{min:350,max:600,label:'High (350°C to 600°C)'},veryhigh:{min:600,max:900,label:'Very High (600°C to 900°C)'}};
+const YIELDBAND={standard:0,high:250,veryhigh:400};
+const CRITERIA=[['corrosion','Corrosion Resistance'],['temp','Temperature Margin'],['yield','Yield Strength'],['weld','Weldability'],['cost','Lifecycle Cost']];
+const APPS={
+ chemical:{label:'Chemical Process Tank'},
+ marine:{label:'Marine / Coastal Structure'},
+ food:{label:'Food Processing Equipment'},
+ solar:{label:'Solar / Renewable Structure'},
+ rail:{label:'Railway / Transport Component'},
+ custom:{label:'Custom Application'}
+};
+const EMPTY_INPUTS={app:'',chloride:'',acid:'',temp:'',yield:'',welding:'',ph:'',priority:50};
+
+function clamp(x,a=0,b=100){return Math.max(a,Math.min(b,x));}
+function normalize(arr){const s=arr.reduce((a,b)=>a+b,0)||1;return arr.map(x=>x/s);}
+function geometricWeights(matrix){return normalize(matrix.map(r=>Math.pow(r.reduce((a,b)=>a*b,1),1/r.length)));}
+function ahp(matrix){
+ const w=geometricWeights(matrix),Aw=matrix.map(r=>r.reduce((a,v,i)=>a+v*w[i],0));
+ const lambdas=Aw.map((v,i)=>v/(w[i]||1));const lambda=lambdas.reduce((a,b)=>a+b,0)/lambdas.length;
+ const n=matrix.length,RI={1:0,2:0,3:.58,4:.90,5:1.12}[n]||1.12;const CI=n>1?(lambda-n)/(n-1):0;const CR=RI?CI/RI:0;
+ return{weights:w,lambda,CI,CR};
+}
+function pairValue(v){return v==='1'?1: v==='3'?3:v==='5'?5:v==='7'?7:v==='9'?9:v==='1/3'?1/3:v==='1/5'?1/5:v==='1/7'?1/7:v==='1/9'?1/9:1;}
+function buildMatrix(pairs){const m=Array.from({length:5},()=>Array(5).fill(1));pairs.forEach((p,i)=>{const a=p.a,b=p.b,v=pairValue(p.v);m[a][b]=v;m[b][a]=1/v;});return m;}
+function defaultPairs(priority){
+ // Quick mode produces a transparent starting point for the advanced AHP panel.
+ // It is then editable by the user. This is a convenience mapping, not a claim of expert judgment.
+ const p=priority/100;
+ const target=[.18+.34*p,.14,.18,.16,.36-.34*p];
+ const pairs=[];for(let i=0;i<5;i++)for(let j=i+1;j<5;j++){
+   const ratio=target[i]/target[j];let v=ratio>=1?ratio:1/ratio;let options=[1,3,5,7,9];let best=options.reduce((x,o)=>Math.abs(o-v)<Math.abs(x-v)?o:x,1);pairs.push({a:i,b:j,v:ratio>=1?String(best):'1/'+best});
+ }return pairs;
+}
+function tempScore(g,band){
+ const low=band.min-g.minT, high=g.maxT-band.max;if(low<0||high<0)return 0;
+ const lowMargin=clamp(50+low/2),highMargin=clamp(50+high/8);return clamp((lowMargin+highMargin)/2);
+}
+function evaluate(inputs,mode='quick',pairs=null){
+ const reqPREN=CHLORIDE[inputs.chloride]+ACID[inputs.acid],band=TEMPBAND[inputs.temp],reqYield=YIELDBAND[inputs.yield];
+ const results=[],rejected=[];
+ Object.entries(GRADES).forEach(([key,g])=>{
+  if(g.pren<reqPREN){rejected.push({key,g,reason:`Insufficient chloride/acid screening resistance (PREN ${g.pren} < required ${reqPREN})`});return;}
+  if(!(g.minT<=band.min&&g.maxT>=band.max)){rejected.push({key,g,reason:`Not rated for the selected ${band.label} service range`});return;}
+  if(g.yield<reqYield){rejected.push({key,g,reason:`Yield strength ${g.yield} MPa is below the selected ${inputs.yield} requirement`});return;}
+  const corrosion=clamp(50+(g.pren-reqPREN)*3),cost=clamp(100-(g.cost-1)*40),mech=clamp(50+(g.yield-reqYield)*.15),weld=g.weld,temp=tempScore(g,band);
+  const form=g.form;
+  const scores={corrosion,temp,yield:mech,weld,cost};
+  let final=0,detail={};
+  if(mode==='advanced'){
+    const matrix=buildMatrix(pairs);const A=ahp(matrix);const weights={corrosion:A.weights[0],temp:A.weights[1],yield:A.weights[2],weld:A.weights[3],cost:A.weights[4]};
+    detail=weights;
+    results.push({key,g,scores,reqPREN,over:(g.pren-reqPREN)>12,under:(g.pren-reqPREN)<3});
+    return;
+  }
+  const p=inputs.priority/100;const weights={corrosion:.18+.34*p,temp:.14,yield:.18,weld:inputs.welding?.16:.10,cost:.36-.34*p};
+  const total=Object.values(weights).reduce((a,b)=>a+b,0);Object.keys(weights).forEach(k=>weights[k]/=total);
+  final=Object.keys(weights).reduce((s,k)=>s+weights[k]*scores[k],0);
+  results.push({key,g,scores,score:final,weights,reqPREN,over:(g.pren-reqPREN)>12,under:(g.pren-reqPREN)<3});
+ });
+ if(mode==='advanced'){
+   const matrix=buildMatrix(pairs),A=ahp(matrix),weights=A.weights;
+   results.forEach(r=>r.ahpWeights=weights);
+   const valid=results;
+   const decision=valid.map(r=>[r.scores.corrosion,r.scores.temp,r.scores.yield,r.scores.weld,r.scores.cost]);
+   const norm=[];for(let j=0;j<5;j++){const d=Math.sqrt(decision.reduce((s,row)=>s+row[j]*row[j],0))||1;norm.push(valid.map((_,i)=>decision[i][j]/d));}
+   const weighted=valid.map((r,i)=>norm.map((col,j)=>col[i]*weights[j]));
+   const idealBest=[],idealWorst=[];for(let j=0;j<5;j++){const vals=weighted.map(row=>row[j]);idealBest[j]=Math.max(...vals);idealWorst[j]=Math.min(...vals);}
+   valid.forEach((r,i)=>{const dPlus=Math.sqrt(weighted[i].reduce((s,v,j)=>s+(v-idealBest[j])**2,0));const dMinus=Math.sqrt(weighted[i].reduce((s,v,j)=>s+(v-idealWorst[j])**2,0));r.score=dPlus+dMinus===0?1:dMinus/(dPlus+dMinus);r.topsis={dPlus,dMinus,weighted:weighted[i],norm:norm.map(c=>c[i]),idealBest,idealWorst};});
+   valid.sort((a,b)=>b.score-a.score);return{top:valid.slice(0,3),rejected,reqPREN,band,weights,ahp:A,matrix};
+ }
+ results.sort((a,b)=>b.score-a.score);return{top:results.slice(0,3),rejected,reqPREN,band};
+}
+function Radar({items}){const axes=['Corrosion','Cost','Yield','Weldability','Temp'];const colors=['#22c55e','#60a5fa','#f97316'];const cx=150,cy=145,R=100;const angle=i=>-Math.PI/2+i*(2*Math.PI/5);const pt=(i,v)=>{const r=R*v/100;return[cx+r*Math.cos(angle(i)),cy+r*Math.sin(angle(i))]};const rings=[20,40,60,80,100].map((v,k)=>h('polygon',{key:k,points:axes.map((_,i)=>pt(i,v).join(',')).join(' '),fill:'none',stroke:'var(--border)',strokeWidth:1}));const lines=axes.map((a,i)=>{const [x,y]=pt(i,100);return h('line',{key:i,x1:cx,y1:cy,x2:x,y2:y,stroke:'var(--border)'})});const labels=axes.map((a,i)=>{const [x,y]=pt(i,118);return h('text',{key:i,x,y,fontSize:9,fill:'var(--muted)',textAnchor:'middle'},a)});const polys=items.map((it,idx)=>{const m=[it.scores.corrosion,it.scores.cost,it.scores.yield,it.scores.weld,it.scores.temp];return h('polygon',{key:idx,points:m.map((v,i)=>pt(i,v).join(',')).join(' '),fill:colors[idx],fillOpacity:.16,stroke:colors[idx],strokeWidth:2})});return h('div',null,h('div',{className:'svgbox'},h('svg',{viewBox:'0 0 300 300',style:{width:'100%',maxWidth:350}},rings,lines,labels,polys)),h('div',{className:'legend'},items.map((it,i)=>h('span',{key:i},h('span',{className:'dot',style:{width:10,height:10,borderRadius:'50%',display:'inline-block',background:colors[i],marginRight:5}}),it.g.name))));}
+function scoreBar(v){return h('div',{className:'meter'},h('span',{style:{width:clamp(v)+'%'}}));}
+function SensitivityPanel({quickSensitivity,setTab}){
+  const cards=quickSensitivity.map(x=>h('div',{className:'scenario',key:x.p},
+    h('strong',null,x.p<40?'Cost-heavy':x.p>60?'Corrosion-heavy':'Balanced'),
+    h('div',{className:'small muted'},'Priority dial: ',x.p),
+    h('div',{style:{marginTop:8,fontWeight:900}},x.top),
+    h('div',{className:'small muted'},'Quick score: ',Math.round(x.score),'/100')
+  ));
+  return h('div',null,
+    h('div',{className:'card'},
+      h('div',{className:'section-title'},h('h3',null,'What-if: Decision Priority Sensitivity'),h('span',{className:'badge'},'Quick mode diagnostic')),
+      h('div',{className:'info'},'This diagnostic changes only the Cost ↔ Corrosion priority dial while keeping the other prototype weights fixed. It shows whether the top recommendation is sensitive to stakeholder priorities.'),
+      h('div',{className:'whatif',style:{marginTop:12}},cards),
+      h('div',{className:'notice'},'If the recommendation changes materially as priorities move, that is not a bug: it demonstrates that grade selection depends on the application owner’s trade-offs. Advanced AHP mode lets the user inspect and edit the full five-criterion priority structure.')
+    ),
+    h('div',{className:'card'},
+      h('h3',null,'Recommended demo sequence'),
+      h('ol',{className:'small',style:{lineHeight:1.8}},
+        h('li',null,'Start with Quick mode and select an application.'),
+        h('li',null,'Set service conditions and calculate.'),
+        h('li',null,'Show hard-filter rejections.'),
+        h('li',null,'Explain the top grade and over-specification alternative.'),
+        h('li',null,'Open Advanced Engineering Mode.'),
+        h('li',null,'Show AHP weights + CR < 0.10.'),
+        h('li',null,'Show TOPSIS closeness and technical evidence.'),
+        h('li',null,'Change a priority and demonstrate how the recommendation changes.')
+      )
+    ),
+    h('div',{className:'row no-print'},h('button',{className:'btn ghost',onClick:()=>setTab('results')},'← Back to Recommendation'))
+  );
+}
+function App(){
+ const [inputs,setInputs]=useState({...EMPTY_INPUTS});
+ const [app,setApp]=useState('');
+ const [mode,setMode]=useState('quick');
+ const [advancedOpen,setAdvancedOpen]=useState(false);
+ const [pairs,setPairs]=useState(defaultPairs(65));
+ const [result,setResult]=useState(null);
+ const [dirty,setDirty]=useState(false);
+ const [tab,setTab]=useState('results');
+ const set=(k,v)=>{setInputs(x=>({...x,[k]:v}));if(result)setDirty(true)};
+ const chooseApp=v=>{setApp(v);setInputs(x=>({...EMPTY_INPUTS,app:v,priority:x.priority??50}));setPairs(defaultPairs(50));setMode('quick');setAdvancedOpen(false);setResult(null);setDirty(false);setTab('results')};
+ const isComplete=inputs.app!==''&&inputs.chloride!==''&&inputs.acid!==''&&inputs.temp!==''&&inputs.yield!==''&&inputs.welding!==''&&inputs.ph!==''&&Number.isFinite(Number(inputs.ph))&&Number(inputs.ph)>=0&&Number(inputs.ph)<=14;
+ const calc=()=>{if(!isComplete)return;setResult(evaluate(inputs,mode,pairs));setDirty(false);setTab('results')};
+ const toggleAdvanced=()=>{if(!advancedOpen){setPairs(defaultPairs(inputs.priority));setMode('advanced')}else{setMode('quick')}setAdvancedOpen(!advancedOpen);if(result)setDirty(true)};
+ const pairSet=(idx,v)=>{setPairs(ps=>ps.map((p,i)=>i===idx?({...p,v}):p));if(result)setDirty(true)};
+ const currentAHP=useMemo(()=>ahp(buildMatrix(pairs)),[pairs]);
+ const completeness=useMemo(()=>{const keys=['app','chloride','acid','temp','yield','welding','ph'];return Math.round(keys.filter(k=>inputs[k]!==''&&inputs[k]!==undefined&&inputs[k]!==null).length/keys.length*100)},[inputs]);
+ const quickSensitivity=useMemo(()=>isComplete?[20,50,80].map(p=>{const r=evaluate({...inputs,priority:p},'quick');return{p,top:r.top[0]?.g.name||'No fit',score:r.top[0]?.score||0}}):[],[inputs,isComplete]);
+ const formOptions=[['low','Low'],['moderate','Moderate'],['high','High']];
+ const inputCard=h('div',{className:'card'},[
+  h('div',{className:'section-title',key:'title'},[h('h3',{key:'h'},'1. Application & Service Requirements'),h('span',{className:'badge',key:'b'},'Quick start')]),
+  h('div',{className:'grid',key:'g1'},[
+   h('div',{key:'app'},[h('label',null,'What are you designing?'),h('select',{value:app,onChange:e=>chooseApp(e.target.value)},[h('option',{key:'',value:''},'Select application / use case'),...Object.entries(APPS).map(([k,v])=>h('option',{key:k,value:k},v.label))]),h('div',{className:'small muted',style:{marginTop:6}},'Application is a label/template only; service conditions must be selected explicitly.')]),
+   h('div',{key:'chloride'},[h('label',null,'Chloride Exposure'),h('select',{value:inputs.chloride,onChange:e=>set('chloride',e.target.value)},h('option',{value:''},'Select chloride exposure'),h('option',{value:'low'},'Low'),h('option',{value:'moderate'},'Moderate'),h('option',{value:'mod-high'},'Moderate–High'),h('option',{value:'high'},'High'),h('option',{value:'severe'},'Severe / Seawater'))]),
+   h('div',{key:'acid'},[h('label',null,'Acid Exposure'),h('select',{value:inputs.acid,onChange:e=>set('acid',e.target.value)},h('option',{value:''},'Select acid exposure'),h('option',{value:'none'},'None'),h('option',{value:'mild'},'Mild'),h('option',{value:'moderate'},'Moderate'),h('option',{value:'strong'},'Strong'))]),
+   h('div',{key:'temp'},[h('label',null,'Operating Temperature'),h('select',{value:inputs.temp,onChange:e=>set('temp',e.target.value)},[h('option',{key:'',value:''},'Select operating temperature'),...Object.entries(TEMPBAND).map(([k,v])=>h('option',{key:k,value:k},v.label))])]),
+   h('div',{key:'yield'},[h('label',null,'Minimum Required Yield Strength'),h('select',{value:inputs.yield,onChange:e=>set('yield',e.target.value)},h('option',{value:''},'Select minimum yield strength'),h('option',{value:'standard'},'Standard (<250 MPa)'),h('option',{value:'high'},'High (250–400 MPa)'),h('option',{value:'veryhigh'},'Very High (>400 MPa)'))]),
+   h('div',{key:'ph'},[h('label',null,'pH (context input)'),h('input',{type:'number',min:0,max:14,step:.1,value:inputs.ph,onChange:e=>set('ph',e.target.value===''?'':+e.target.value),placeholder:'Enter pH (0–14)'})])
+  ]),
+  h('div',{className:'grid',style:{marginTop:12},key:'g2'},[
+   h('div',{key:'weld'},[h('label',null,'Fabrication / Welding'),h('select',{value:inputs.welding,onChange:e=>set('welding',e.target.value)},[h('option',{key:'',value:''},'Select fabrication requirement'),h('option',{key:'yes',value:'yes'},'Welding / fabrication required'),h('option',{key:'no',value:'no'},'No welding / fabrication requirement')])]),
+   h('div',{key:'priority'},[h('label',null,'Quick Decision Priority'),h('div',{className:'small muted',style:{display:'flex',justifyContent:'space-between'}},[h('span',{key:'c'},'Cost'),h('b',{key:'n'},inputs.priority),h('span',{key:'r'},'Corrosion Resistance')]),h('input',{type:'range',min:0,max:100,value:inputs.priority,onChange:e=>{const v=+e.target.value;set('priority',v);if(!advancedOpen)setPairs(defaultPairs(v))}})])
+  ]),
+  h('div',{className:'row',key:'buttons'},[h('button',{className:'btn',onClick:calc,disabled:!isComplete,key:'calc',style:!isComplete?{opacity:.45,cursor:'not-allowed'}:{}},result?'Recalculate Recommendation →':'Calculate Recommendation →'),h('button',{className:'btn ghost',onClick:toggleAdvanced,key:'adv'},advancedOpen?'Hide Advanced Engineering Mode':'⚙ Advanced Engineering Mode')]),
+  !isComplete&&h('div',{className:'notice',key:'required'},'No recommendation yet. Select every required engineering input above, then calculate. Application type only identifies the use case; it does not auto-fill or silently change engineering conditions.'),
+  advancedOpen&&h('div',{style:{marginTop:14},key:'advanced'},[
+   h('div',{className:'info',key:'info'},'Advanced mode exposes the full AHP pairwise-priority model and TOPSIS ranking. Quick mode remains the customer-friendly path. The initial AHP judgments are a transparent convenience mapping from the quick priority dial; for a rigorous deployment, validate the pairwise judgments with JSL engineering experts.'),
+   h('div',{className:'section-title',style:{marginTop:14},key:'at'},[h('h3',{key:'h'},'AHP Priority Builder'),h('span',{className:'badge green',key:'b'},`CR ${currentAHP.CR.toFixed(3)} ${currentAHP.CR<.1?'✓ consistent':'⚠ review'}`)]),
+   h('div',{className:'pair-grid',key:'pairs'},pairs.map((p,i)=>h('div',{className:'pair',key:i},[h('div',{className:'small',key:'t'},[h('b',{key:'a'},CRITERIA[p.a][1]),' vs ',h('b',{key:'b'},CRITERIA[p.b][1])]),h('select',{key:'s',value:p.v,onChange:e=>pairSet(i,e.target.value)},['1','3','5','7','9','1/3','1/5','1/7','1/9'].map(v=>h('option',{key:v,value:v},v==='1'?'Equal importance':`${v} preference`)))]))),
+   h('div',{className:'weights',style:{marginTop:12},key:'weights'},currentAHP.weights.map((w,i)=>h('div',{className:'weight-card',key:i},[h('strong',{key:'s'},CRITERIA[i][1]),h('div',{className:'small',key:'v'},(w*100).toFixed(1)+'%'),scoreBar(w*100)]))),
+   h('div',{className:'small muted',style:{marginTop:10},key:'diag'},`λmax = ${currentAHP.lambda.toFixed(3)} · CI = ${currentAHP.CI.toFixed(3)} · CR = ${currentAHP.CR.toFixed(3)}${currentAHP.CR<.1?' — acceptable consistency.':' — revise pairwise judgments before relying on the result.'}`)
+  ]),
+  dirty&&h('div',{className:'notice',key:'dirty'},'Inputs or advanced priorities changed since the last calculation — click Recalculate to refresh the recommendation.')
+ ]);
+ const hero=h('div',{className:'hero'},h('div',{className:'hero-grid'},[
+  h('div',{key:'left'},[h('h1',null,'JSL SmartGrade Engine'),h('p',{className:'sub'},'Constraint-aware stainless-steel grade recommendation with transparent engineering reasoning.'),h('div',{className:'row small'},[h('span',{key:'r'},'Round 2 prototype'),h('span',{className:'badge green',key:'b'},'Hard constraints + AHP + TOPSIS')])]),
+  h('div',{key:'right'},[h('div',{className:'small'},`Required input coverage: ${completeness}%`),h('div',{className:'progress'},h('span',{style:{width:completeness+'%'}}))])
+ ]));
+ const screening=result&&result.top? h('div',{className:'card'},[
+  h('div',{className:'section-title',key:'t'},[h('h3',{key:'h'},'4. Engineering Screening'),h('span',{className:'badge green',key:'b'},`${Object.keys(GRADES).length} grades evaluated · ${result.top.length} passed`)]),
+  result.rejected.length?h('div',{key:'rej'},result.rejected.map(r=>h('div',{className:'reject',key:r.key},[h('b',{key:'b'},r.g.name),' — ',r.reason]))):h('div',{className:'success',key:'ok'},'All grades in the prototype dataset cleared the hard constraints.'),
+  h('div',{className:'info',style:{marginTop:10},key:'i'},'Hard constraints are applied before multi-criteria ranking. A grade that fails a mandatory requirement cannot be rescued by a high TOPSIS score.')
+ ]):null;
+ const ranking=result&&h('div',{className:'card'},[
+  h('div',{className:'section-title',key:'t'},[h('h3',{key:'h'},mode==='advanced'?'2. AHP–TOPSIS Ranking':'2. Quick Fit Rating'),h('span',{className:'badge',key:'b'},mode==='advanced'?'Actual TOPSIS closeness':'Quick weighted score')]),
+  result.top.length===0?h('p',{key:'none'},'No grade in this prototype set clears the hard-constraint filter for these inputs.'):result.top.map((it,idx)=>{
+   const displayScore=mode==='advanced'?(it.score*100).toFixed(1):Math.round(it.score);
+   const status=idx===0?'★ Top pick':it.over?'⚠ Over-spec':it.under?'⚠ Under-spec risk':'Alternative';
+   let why='';
+   if(idx===0){
+     if(it.g.pren>result.reqPREN && it.g.weld>=80 && it.g.cost<=1.5) why=`Strong corrosion–cost balance for this duty; PREN ${it.g.pren.toFixed(1)} vs required ${result.reqPREN.toFixed(0)}.`;
+     else if(it.g.pren>result.reqPREN && it.g.weld<80) why=`High corrosion and strength margin, balanced against lower weldability for this duty.`;
+     else if(it.g.pren>result.reqPREN) why=`Meets the corrosion requirement with a ${Math.max(0,it.g.pren-result.reqPREN).toFixed(1)} PREN margin and strongest overall weighted fit.`;
+     else why='Best overall balance across the selected criteria after mandatory screening.';
+   } else if(it.over){
+     why=`Higher corrosion${it.g.yield>YIELDBAND[inputs.yield]?' and strength':''} margin than this duty needs.`;
+   } else if(it.under){
+     why='Limited performance margin against the stated duty; retained only as a lower-fit alternative.';
+   } else {
+     const costWord=it.g.cost<result.top[0].g.cost?'Lower material cost':'Higher material cost';
+     why=`${costWord} with a lower overall fit under the selected priorities.`;
+   }
+   return h('div',{className:'rankcard',key:it.key},[
+     h('div',{className:'rankline',key:'line'},[
+       h('span',{className:'gname',key:'n'},`${idx+1}. ${it.g.name}`),
+       ' — ',h('span',{className:'score',key:'s'},`${displayScore}/100`),
+       h('span',{className:'rank-status '+(idx===0?'top':it.over?'over':it.under?'under':'alt'),key:'st'},` ${status}`),
+       idx===0 && mode==='advanced' && h('span',{className:'small muted',key:'m'},' · TOPSIS')
+     ]),
+     h('div',{className:'rankwhy',key:'why'},why)
+   ]);
+ })
+ ]);
+ const explain=result&&result.top.length?h('div',{className:'card'},[
+  h('div',{className:'section-title',key:'t'},[h('h3',{key:'h'},'3. Why this grade?'),h('span',{className:'badge green',key:'b'},'Explainable recommendation')]),
+  h('div',{className:'grid',key:'g'},[
+   h('div',{key:'left'},[h('div',{className:'success',key:'s'},[h('b',{key:'b'},result.top[0].g.name),' is the current top recommendation for the stated duty.']),h('ul',{className:'small',style:{lineHeight:1.7},key:'ul'},[h('li',{key:1},'Corrosion screening: PREN ',result.top[0].g.pren,' vs required ',result.reqPREN),h('li',{key:2},'Temperature service: ',result.band.label),h('li',{key:3},'Yield strength: ',result.top[0].g.yield,' MPa'),h('li',{key:4},'Weldability indicator: ',result.top[0].g.weld,'/100'),h('li',{key:5},'Relative lifecycle cost index: ',result.top[0].g.cost.toFixed(2))]),Number(inputs.ph)<4&&h('div',{className:'review',style:{marginTop:10},key:'ph'},'pH is highly acidic. The prototype uses pH as a review trigger rather than as a standalone corrosion-design rule. Detailed chemical compatibility requires engineering validation.')]),
+   h('div',{key:'right'},[h('h4',{style:{marginTop:0},key:'h'},'Top-3 comparison'),h('div',{className:'table-wrap',key:'tw'},h('table',{className:'table'},[h('thead',{key:'th'},h('tr',null,[h('th',{key:'c'},'Criterion'),...result.top.map(x=>h('th',{key:x.key},x.g.name.split(' ')[0]))])),h('tbody',{key:'tb'},['corrosion','temp','yield','weld','cost'].map(k=>h('tr',{key:k},[h('td',{key:'n'},({corrosion:'Corrosion',temp:'Temperature',yield:'Yield strength',weld:'Weldability',cost:'Lifecycle cost'}[k])),...result.top.map(x=>h('td',{key:x.key,className:x===result.top[0]?'best':''},x.scores[k].toFixed(0)))]))) ]))])
+  ])
+ ]):null;
+ const tradeoff=result&&result.top.length>=2?h('div',{className:'card'},[h('h3',{key:'h'},'5. Trade-Off Explanation'),h('div',{className:'tradeoff',key:'t'},(()=>{const a=result.top[0],b=result.top[1];const premium=(a.g.cost-b.g.cost)/b.g.cost*100;return h('span',null,[h('b',{key:'a'},a.g.name),' ranks first because its combined fit is strongest under the selected priorities. Compared with ',h('b',{key:'b'},b.g.name),premium>0?` it carries an approximately ${premium.toFixed(0)}% higher relative material-cost index, but provides a different performance/cost balance for this duty.`:' it provides a comparable or lower relative material-cost index while meeting the selected constraints.'])})())]) : null;
+ const radar=result&&result.top.length?h('div',{className:'card'},[h('div',{className:'section-title',key:'t'},[h('h3',{key:'h'},'6. Multi-Criteria Trade-Off View'),h('span',{className:'badge',key:'b'},'Top 3')]),h(Radar,{items:result.top,key:'r'})]):null;
+ const review=result&&h('div',{className:'card'},[h('div',{className:'section-title',key:'t'},[h('h3',{key:'h'},'7. Engineering Review Status'),h('span',{className:'badge orange',key:'b'},result.reqPREN>=35||Number(inputs.ph)<4||inputs.temp==='veryhigh'?'Review recommended':'Prototype screening')]),result.reqPREN>=35||Number(inputs.ph)<4||inputs.temp==='veryhigh'?h('div',{className:'review',key:'r'},'JSL technical review is recommended because the exposure/operating conditions are demanding or simplified prototype logic may not capture all failure mechanisms. This tool is decision support, not a substitute for engineering approval.'):h('div',{className:'success',key:'s'},'No special review trigger was detected by the prototype rules. Normal engineering approval still applies before industrial use.')]);
+ const resultView=result&&!dirty?h('div',null,[ranking,explain,screening,tradeoff,radar,review,h('div',{className:'row no-print',key:'actions'},[h('button',{className:'btn green',onClick:()=>window.print(),key:'pdf'},'Generate / Save Recommendation as PDF'),h('button',{className:'btn secondary',onClick:()=>setTab('technical'),key:'tech'},'Show Technical Calculation →')])]):null;
+ const technicalView=mode==='advanced'&&result&&result.ahp?h('div',null,[
+  h('div',{className:'card',key:'weights'},[h('div',{className:'section-title'},[h('h3',{key:'h'},'AHP Priority Weights'),h('span',{className:'badge green',key:'b'},`CR ${result.ahp.CR.toFixed(3)}`)]),h('div',{className:'weights'},result.weights.map((w,i)=>h('div',{className:'weight-card',key:i},[h('strong',{key:'s'},CRITERIA[i][1]),h('div',{className:'small',key:'v'},(w*100).toFixed(1)+'%'),scoreBar(w*100)]))),h('div',{className:'info',style:{marginTop:10}},'AHP derives criteria weights from pairwise comparisons. CR below 0.10 is the prototype acceptance threshold for consistency.')]),
+  h('div',{className:'card',key:'topsis'},[h('h3',null,'TOPSIS Calculation'),h('div',{className:'table-wrap'},h('table',{className:'table'},[h('thead',{key:'h'},h('tr',null,[h('th',{key:'g'},'Grade'),...CRITERIA.map(c=>h('th',{key:c[0]},c[1])),h('th',{key:'s'},'Closeness')])),h('tbody',{key:'b'},result.top.map(r=>h('tr',{key:r.key},[h('td',{key:'g'},h('b',null,r.g.name)),...CRITERIA.map(c=>h('td',{key:c[0]},r.scores[c[0]].toFixed(1))),h('td',{className:'best',key:'s'},(r.score*100).toFixed(1))])))])),h('div',{className:'info',style:{marginTop:10}},'TOPSIS closeness is calculated after hard-constraint screening. Benefit criteria are maximized; lifecycle cost is represented as a lower-is-better score.')]),
+  h('div',{className:'card',key:'diag'},[h('h3',null,'AHP Consistency Diagnostics'),h('div',{className:'grid'},[h('div',{className:'weight-card'},[h('strong',null,'λmax'),h('div',null,result.ahp.lambda.toFixed(3))]),h('div',{className:'weight-card'},[h('strong',null,'Consistency Index'),h('div',null,result.ahp.CI.toFixed(3))]),h('div',{className:'weight-card'},[h('strong',null,'Consistency Ratio'),h('div',null,result.ahp.CR.toFixed(3)),h('div',{className:'small muted'},result.ahp.CR<.1?'Acceptable':'Needs review')])])]),
+  h('div',{className:'card',key:'interpret'},[h('h3',null,'Technical Interpretation'),h('div',{className:'info'},'Hard constraints determine feasibility; AHP represents relative importance; TOPSIS ranks feasible grades by distance from an ideal multi-criteria solution. Property values and thresholds remain prototype/reference inputs until validated by JSL technical experts.')])
+ ]):h('div',{className:'card'},[h('div',{className:'info'},'Open Advanced Engineering Mode before calculation to expose the full AHP pairwise matrix, consistency diagnostics and actual TOPSIS closeness scores.')]);
+ const dataView=h('div',null,[h('div',{className:'card',key:'data'},[h('div',{className:'section-title'},[h('h3',{key:'h'},'Grade-Property Data'),h('span',{className:'badge orange',key:'b'},'Reference / prototype data')]),h('div',{className:'info'},'These values are retained from the supplied prototype. They are reference/illustrative screening data, not JSL-proprietary specifications. Before deployment, validate them against JSL-approved grade standards, datasheets and commercial data.'),h('div',{className:'table-wrap',style:{marginTop:12}},h('table',{className:'table'},[h('thead',{key:'h'},h('tr',null,['Grade','Type','PREN','Yield','Tensile','Elong.','Temp. range','Weld','Form','Cost index'].map(x=>h('th',{key:x},x)))),h('tbody',{key:'b'},Object.entries(GRADES).map(([k,g])=>h('tr',{key:k},[h('td',{key:'n'},h('b',null,g.name)),h('td',{key:'t'},g.type),h('td',{key:'p'},g.pren),h('td',{key:'y'},g.yield+' MPa'),h('td',{key:'te'},g.tensile+' MPa'),h('td',{key:'e'},g.elong+'%'),h('td',{key:'tm'},g.minT+' to '+g.maxT+'°C'),h('td',{key:'w'},g.weld),h('td',{key:'f'},g.form),h('td',{key:'c'},g.cost.toFixed(2))])))])),h('div',{style:{marginTop:12}},Object.entries(GRADES).map(([k,g])=>h('div',{className:'source-card',key:k},[h('h4',{key:'h'},g.name),h('div',{className:'small muted',key:'s'},'Source set: ',g.source),h('div',{className:'small muted',key:'p'},'PREN formula used: %Cr + 3.3×%Mo + 16×%N. Cost index is a relative prototype ratio, not live pricing.')]))),h('div',{className:'footnote',style:{marginTop:12}},'Source set retained from the supplied artifact: Atlas Steels Product Reference Manual & Grade Data Sheets; worldstainless.org grade sheets; ProjectMaterials 2205 vs 2507 comparison; Langley Alloys grade guide.')]),h('div',{className:'row no-print',key:'back'},h('button',{className:'btn ghost',onClick:()=>setTab('results')},'← Back to Recommendation'))]);
+ const tabContent=result&&!dirty?(tab==='results'?resultView:tab==='technical'?technicalView:tab==='data'?dataView:h(SensitivityPanel,{quickSensitivity,setTab})):null;
+ return h('div',{className:'wrap'},[hero,inputCard,result&&!dirty&&h('div',{className:'tabs',key:'tabs'},['results','technical','data','sensitivity'].map(t=>h('button',{key:t,className:'tab '+(tab===t?'active':''),onClick:()=>setTab(t)},t==='results'?'Recommendation':t==='technical'?'Technical Evidence':t==='data'?'Grade Data':'What-if / Sensitivity'))),tabContent,h('div',{className:'card',key:'footer'},h('details',null,[h('summary',{key:'s'},'Assumptions, limitations & data provenance'),h('div',{className:'footnote',style:{marginTop:10},key:'a'},'Assumptions: ambient baseline properties per ASTM A240 minimums; standard workshop welding with qualified consumables and post-weld pickling/passivation. PREN and temperature bands are simplified screening approximations, not a substitute for a full corrosion/metallurgical assessment. Limitations: excludes stress-corrosion cracking under unmonitored cyclic strain; duplex/super-duplex grades require qualified welding procedures and are temperature-limited above approximately 300–315°C due to intermetallic embrittlement risk; exotic or proprietary chemistries need central technical sign-off. pH is currently a context/review input rather than a standalone corrosion model. Cost indices are illustrative relative ratios, not live market pricing.'),h('div',{className:'footnote',style:{marginTop:8},key:'p'},[h('b',{key:'b'},'Prototype status: '),'Replace/validate grade properties, hard thresholds, cost/lifecycle data and application rules with JSL-approved information before industrial deployment.'])]))]);
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script></body></html>
